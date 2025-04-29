@@ -2,6 +2,7 @@ package br.com.damatomos.currency_converter.infrastructure;
 
 import br.com.damatomos.currency_converter.application.CurrencyConverter;
 import br.com.damatomos.currency_converter.infrastructure.config.Configurations;
+import br.com.damatomos.currency_converter.infrastructure.gui.AdvancedMode;
 import br.com.damatomos.currency_converter.infrastructure.gui.ChallengeUserInterface;
 import br.com.damatomos.currency_converter.infrastructure.services.CurrencyService;
 
@@ -12,7 +13,8 @@ public class Application {
     public static void main(String[] args)
     {
         Scanner in = new Scanner(System.in);
-
+        CurrencyService currencyService = new CurrencyService(new Configurations());
+        CurrencyConverter converter = new CurrencyConverter();
         var gui =
                 """
                 Escolha entre as interfaces:
@@ -29,12 +31,15 @@ public class Application {
         {
             new ChallengeUserInterface(
                     in,
-                    new CurrencyService(new Configurations()),
-                    new CurrencyConverter()
+                    currencyService,
+                    converter
             ).run();
         } else if (option.equals(2))
         {
-            // AdvanceMode
+            new AdvancedMode(
+                    currencyService,
+                    converter
+            ).run();
         } else {
             System.out.println("Aplicação finalizada");
         }

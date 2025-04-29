@@ -15,22 +15,20 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
 
-public class ChallengeUserInterface {
+public class ChallengeUserInterface extends UserInterface {
 
     private final Scanner in;
-    private final CurrencyService currencyService;
-    private final CurrencyConverter converter;
 
     private Boolean runnable;
     private List<Currency> currencies;
 
     public ChallengeUserInterface(Scanner in, CurrencyService currencyService, CurrencyConverter converter)
     {
+        super(currencyService, converter);
         this.in = in;
-        this.currencyService = currencyService;
-        this.converter = converter;
     }
 
+    @Override
     public void run() {
         runnable = true;
 
@@ -38,7 +36,7 @@ public class ChallengeUserInterface {
         {
             try {
 
-                ResponseSupportedCodesDTO supportedCodesDTO = currencyService.getSupportedCodes();
+                ResponseSupportedCodesDTO supportedCodesDTO = this.currencyService.getSupportedCodes();
                 this.currencies = CurrencyMapper.toEntity(supportedCodesDTO);
 
                 showOptions();
