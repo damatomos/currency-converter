@@ -1,11 +1,14 @@
 package br.com.damatomos.currency_converter.infrastructure;
 
+import br.com.damatomos.currency_converter.core.entity.Currency;
 import br.com.damatomos.currency_converter.infrastructure.config.Configurations;
 import br.com.damatomos.currency_converter.infrastructure.dto.ResponseCurrencyStatusDTO;
+import br.com.damatomos.currency_converter.infrastructure.dto.ResponseSupportedCodesDTO;
 import br.com.damatomos.currency_converter.infrastructure.mapper.CurrencyMapper;
 import br.com.damatomos.currency_converter.infrastructure.services.CurrencyService;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Application {
 
@@ -16,8 +19,8 @@ public class Application {
         CurrencyService currencyService = new CurrencyService(config);
 
         try {
-            ResponseCurrencyStatusDTO dto = currencyService.getCurrency("USD");
-            System.out.println(CurrencyMapper.toEntity(dto));
+            ResponseSupportedCodesDTO supportedCodesDTO = currencyService.getSupportedCodes();
+            List<Currency> currencies = CurrencyMapper.toEntity(supportedCodesDTO);
         } catch (IOException e)
         {
             System.out.println("Erro durante a operação GET");

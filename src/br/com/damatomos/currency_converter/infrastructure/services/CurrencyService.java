@@ -2,6 +2,7 @@ package br.com.damatomos.currency_converter.infrastructure.services;
 
 import br.com.damatomos.currency_converter.infrastructure.config.Configurations;
 import br.com.damatomos.currency_converter.infrastructure.dto.ResponseCurrencyStatusDTO;
+import br.com.damatomos.currency_converter.infrastructure.dto.ResponseSupportedCodesDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -27,6 +28,17 @@ public class CurrencyService {
                 ));
 
         return gson.fromJson(response, ResponseCurrencyStatusDTO.class);
+    }
+
+    public ResponseSupportedCodesDTO getSupportedCodes() throws IOException, InterruptedException {
+        String response = WebService.get(
+                String.format(
+                        "https://v6.exchangerate-api.com/v6/%s/codes",
+                        this.configurations.getExchangeApiKey()
+                )
+        );
+
+        return gson.fromJson(response, ResponseSupportedCodesDTO.class);
     }
 
 }
