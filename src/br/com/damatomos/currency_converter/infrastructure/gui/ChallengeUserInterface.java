@@ -2,7 +2,8 @@ package br.com.damatomos.currency_converter.infrastructure.gui;
 
 import br.com.damatomos.currency_converter.application.CurrencyConverter;
 import br.com.damatomos.currency_converter.core.entity.Currency;
-import br.com.damatomos.currency_converter.infrastructure.config.Configurations;
+import br.com.damatomos.currency_converter.core.exceptions.InvalidOptionSelectedException;
+import br.com.damatomos.currency_converter.core.exceptions.NullCurrencyFieldException;
 import br.com.damatomos.currency_converter.infrastructure.dto.ResponseConversionRateDTO;
 import br.com.damatomos.currency_converter.infrastructure.dto.ResponseSupportedCodesDTO;
 import br.com.damatomos.currency_converter.infrastructure.enums.CurrencyCodeEnum;
@@ -43,6 +44,9 @@ public class ChallengeUserInterface {
                 showOptions();
                 callOperationBasedChoose();
 
+            }catch (InvalidOptionSelectedException | NullCurrencyFieldException e)
+            {
+                System.out.println(e.getMessage());
             } catch (IOException e)
             {
                 System.out.println("Erro durante a operação GET");
@@ -93,8 +97,7 @@ public class ChallengeUserInterface {
             return;
         } else if (option < 1 || option > 7)
         {
-            System.out.println("Operação inválida. Tente novamente com outra opção");
-            return;
+            throw new InvalidOptionSelectedException("Operação inválida. Tente novamente com outra opção");
         }
 
         System.out.println("Digite o valor que deseja converter");
@@ -147,7 +150,10 @@ public class ChallengeUserInterface {
 
     private BigDecimal calculateOperation(BigDecimal value, Currency base, Currency target) throws IOException, InterruptedException {
 
-        if (base == null || target == null) return new BigDecimal(0);
+        if (base == null || target == null)
+        {
+            throw new NullCurrencyFieldException("Currencies não podem ser null");
+        };
 
         ResponseConversionRateDTO conversionRateDTO = currencyService.getConversionRateBetweenPair(
                 base.getBaseCode(),

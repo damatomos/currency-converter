@@ -11,17 +11,11 @@ public class Application {
 
     public static void main(String[] args)
     {
-        Configurations config = new Configurations();
-
-        CurrencyService currencyService = new CurrencyService(config);
-
-        ChallengeUserInterface challengeGUI = new ChallengeUserInterface(
+        new ChallengeUserInterface(
                 new Scanner(System.in),
-                currencyService,
+                new CurrencyService(new Configurations()),
                 new CurrencyConverter()
-        );
-
-        challengeGUI.run();
+        ).run();
 
     }
 
