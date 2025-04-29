@@ -2,6 +2,7 @@ package br.com.damatomos.currency_converter.infrastructure;
 
 import br.com.damatomos.currency_converter.core.entity.Currency;
 import br.com.damatomos.currency_converter.infrastructure.config.Configurations;
+import br.com.damatomos.currency_converter.infrastructure.dto.ResponseConversionRateDTO;
 import br.com.damatomos.currency_converter.infrastructure.dto.ResponseCurrencyStatusDTO;
 import br.com.damatomos.currency_converter.infrastructure.dto.ResponseSupportedCodesDTO;
 import br.com.damatomos.currency_converter.infrastructure.mapper.CurrencyMapper;
@@ -21,6 +22,13 @@ public class Application {
         try {
             ResponseSupportedCodesDTO supportedCodesDTO = currencyService.getSupportedCodes();
             List<Currency> currencies = CurrencyMapper.toEntity(supportedCodesDTO);
+
+            ResponseConversionRateDTO conversionRateDTO = currencyService.getConversionRateBetweenPair(
+                    currencies.get(0).getBaseCode(),
+                    currencies.get(1).getBaseCode());
+
+            System.out.println(currencies.get(0).getName() + "\n" + currencies.get(1).getName() + "\n" + conversionRateDTO);
+
         } catch (IOException e)
         {
             System.out.println("Erro durante a operação GET");
