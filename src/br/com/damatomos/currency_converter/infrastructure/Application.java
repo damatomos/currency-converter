@@ -1,15 +1,11 @@
 package br.com.damatomos.currency_converter.infrastructure;
 
-import br.com.damatomos.currency_converter.core.entity.Currency;
+import br.com.damatomos.currency_converter.application.CurrencyConverter;
 import br.com.damatomos.currency_converter.infrastructure.config.Configurations;
-import br.com.damatomos.currency_converter.infrastructure.dto.ResponseConversionRateDTO;
-import br.com.damatomos.currency_converter.infrastructure.dto.ResponseCurrencyStatusDTO;
-import br.com.damatomos.currency_converter.infrastructure.dto.ResponseSupportedCodesDTO;
-import br.com.damatomos.currency_converter.infrastructure.mapper.CurrencyMapper;
+import br.com.damatomos.currency_converter.infrastructure.gui.ChallengeUserInterface;
 import br.com.damatomos.currency_converter.infrastructure.services.CurrencyService;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Scanner;
 
 public class Application {
 
@@ -19,23 +15,14 @@ public class Application {
 
         CurrencyService currencyService = new CurrencyService(config);
 
-        try {
-            ResponseSupportedCodesDTO supportedCodesDTO = currencyService.getSupportedCodes();
-            List<Currency> currencies = CurrencyMapper.toEntity(supportedCodesDTO);
+        ChallengeUserInterface challengeGUI = new ChallengeUserInterface(
+                new Scanner(System.in),
+                currencyService,
+                new CurrencyConverter()
+        );
 
-            ResponseConversionRateDTO conversionRateDTO = currencyService.getConversionRateBetweenPair(
-                    currencies.get(0).getBaseCode(),
-                    currencies.get(1).getBaseCode());
+        challengeGUI.run();
 
-            System.out.println(currencies.get(0).getName() + "\n" + currencies.get(1).getName() + "\n" + conversionRateDTO);
-
-        } catch (IOException e)
-        {
-            System.out.println("Erro durante a operação GET");
-        } catch (InterruptedException e)
-        {
-            System.out.println("A operação GET foi interrompida");
-        }
     }
 
 }
